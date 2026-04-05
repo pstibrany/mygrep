@@ -30,7 +30,7 @@ func main() {
 	if *cpuprofile != "" {
 		f, err := os.Create(*cpuprofile)
 		if err != nil {
-			fmt.Fprintln(os.Stderr)
+			fmt.Fprintln(os.Stderr, err)
 		} else {
 			pprof.StartCPUProfile(f)
 			defer pprof.StopCPUProfile()

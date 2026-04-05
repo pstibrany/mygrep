@@ -44,7 +44,7 @@ func (this *contextOutput) Reset(filename string) {
 }
 
 func (this *contextOutput) ProcessLine(lineNumber int, line []byte, matches [][]int) error {
-    if len(matches) > 0 && this.contextBefore > 0 {
+    if matches != nil && this.contextBefore > 0 {
         for i := 0; i < this.contextBefore; i++ {
             if this.lines[i] != nil {
                 if err := this.contextOutput.ProcessLine(lineNumber-this.contextBefore+i, this.lines[i], nil); err != nil {
@@ -62,7 +62,7 @@ func (this *contextOutput) ProcessLine(lineNumber int, line []byte, matches [][]
         return err;
     }
     
-    if len(matches) == 0 && this.linesToPrint > 0 {
+    if matches == nil && this.linesToPrint > 0 {
         this.linesToPrint --
 
         return this.contextOutput.ProcessLine(lineNumber, line, matches)        

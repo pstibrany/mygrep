@@ -5,11 +5,7 @@ import "os"
 
 /* This output prints all lines. Lines with matches have matches highlighted. */
 type stdout struct {
-    includeFilename bool
-    includeLineNumber bool
     highlight bool
-    
-    filename string
     lastPrintedLine int
 }
 
@@ -47,6 +43,5 @@ func (this *stdout) ProcessLine(lineNumber int, line []byte, matches [][]int) er
 }
 
 func (this *stdout) Reset(filename string) {
-    this.filename = filename
     this.lastPrintedLine = 0
 }
