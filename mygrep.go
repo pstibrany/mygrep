@@ -23,7 +23,7 @@ func main() {
 	printLineNumbers := flag.Bool("l", false, "Print line numbers")
 	printVersion := flag.Bool("version", false, "Print version")
 	matchesOnly := flag.Bool("m", false, "Print only matched parts of line. Useful when using replacement string.")
-	disableHighlights := flag.Bool("nh", false, "Disable highlights. Highlights are enabled by default")
+	disableHighlights := flag.Bool("nh", false, "Disable highlights. Highlights are enabled automatically when printing to terminal")
 	disableFilenames := flag.Bool("nf", false, "Disable filename prefixes.")
 	flag.Parse()
 
@@ -56,7 +56,10 @@ func main() {
 
 	allFiles := flag.Args()[1:]
 
-	var output Output = NewStandardOutput(!*disableHighlights)
+	fi, _ := os.Stdout.Stat()
+	isTTY := fi != nil && (fi.Mode()&os.ModeCharDevice) != 0
+
+	var output Output = NewStandardOutput(isTTY && !*disableHighlights)
 	output = NewPrefixingOutput(len(allFiles) > 1 && !*disableFilenames, *printLineNumbers, output)
 
 	// origOutput is simply output that prints any line (possibly with prefix and linenumber)
