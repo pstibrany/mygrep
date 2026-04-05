@@ -9,12 +9,8 @@ import "bufio"
 import "path/filepath"
 import "compress/gzip"
 import "compress/bzip2"
-import "runtime/pprof"
 
 func main() {
-	cpuprofile := flag.String("cpuprofile", "", "write cpu profile to file")
-	memprofile := flag.String("memprofile", "", "write memory profile to this file")
-
 	replaceString := flag.String("r", "", "Replacement string. Use $N, ${N} or $name for referencing groups")
 	invertMatch := flag.Bool("v", false, "Invert match")
 	contextBefore := flag.Int("B", 0, "Print this number of lines before the match.")
@@ -26,16 +22,6 @@ func main() {
 	disableHighlights := flag.Bool("nh", false, "Disable highlights. Highlights are enabled automatically when printing to terminal")
 	disableFilenames := flag.Bool("nf", false, "Disable filename prefixes.")
 	flag.Parse()
-
-	if *cpuprofile != "" {
-		f, err := os.Create(*cpuprofile)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		} else {
-			pprof.StartCPUProfile(f)
-			defer pprof.StopCPUProfile()
-		}
-	}
 
 	if *printVersion {
 		fmt.Fprintln(os.Stderr, BuildId)
@@ -93,15 +79,6 @@ func main() {
 		}
 	}
 
-	if *memprofile != "" {
-		f, err := os.Create(*memprofile)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		} else {
-			pprof.WriteHeapProfile(f)
-			f.Close()
-		}
-	}
 }
 
 func usage() {
